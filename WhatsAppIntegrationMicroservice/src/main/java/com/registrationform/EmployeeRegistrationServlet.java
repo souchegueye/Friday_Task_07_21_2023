@@ -21,8 +21,6 @@ import javax.servlet.http.HttpServletResponse;
 public class EmployeeRegistrationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	
-
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
@@ -35,73 +33,14 @@ public class EmployeeRegistrationServlet extends HttpServlet {
 		String eContactNo = request.getParameter("contactNo");
 		String eDateOfJoining = request.getParameter("dateOfJoining");
 		String eEmailAddress = request.getParameter("emailAddress");
-		RequestDispatcher dispatcher = null;
+		RequestDispatcher dispatcher = request.getRequestDispatcher("EmployeeDetails.jsp");
 		Connection con = null;
-
-		PrintWriter out = response.getWriter();
-		out.println("<!DOCTYPE html>");
-		out.println("<html>");
-		out.println("<head>");
-		out.println("<title>Registration Form</title>");
-		// Add any required CSS or other header content here
-		out.println("</head>");
-		out.println("<body>");
-
-		out.println("<div class=\"container\">");
-		out.println("<h1 class=\"inline-heading\">Employment Registration Form</h1>");
-
-		out.println("<form method=\"post\" action=\"EmployeeRegistrationServlet\">");
-
-		out.println("<div class=\"outer-form-group\">");
-		out.println("<div class=\"inner-form-group\">");
-		out.println("<label for=\"name\" class=\"form-label\">Name</label>");
-		out.println("<input type=\"text\" class=\"form-control\" id=\"name\" name=\"name\">");
-		out.println("</div>");
-		out.println("</div>");
-
-		out.println("<div class=\"outer-form-group\">");
-		out.println("<div class=\"inner-form-group\">");
-		out.println("<label for=\"dateOfBirth\" class=\"form-label\">Date Of Birth</label>");
-		out.println("<input type=\"date\" class=\"form-control\" id=\"dateOfBirth\" name=\"dateOfBirth\">");
-		out.println("</div>");
-		out.println("</div>");
-
-		out.println("<div class=\"outer-form-group\">");
-		out.println("<div class=\"inner-form-group\">");
-		out.println("<label for=\"contactNo\" class=\"form-label\">Contact No.</label>");
-		out.println("<input type=\"tel\" class=\"form-control\" id=\"contactNo\" name=\"contactNo\">");
-		out.println("</div>");
-		out.println("</div>");
-
-		out.println("<div class=\"outer-form-group\">");
-		out.println("<div class=\"inner-form-group\">");
-		out.println("<label for=\"dateOfJoining\" class=\"form-label\">Date Of Joining</label>");
-		out.println("<input type=\"date\" class=\"form-control\" id=\"dateOfJoining\" name=\"dateOfJoining\">");
-		out.println("</div>");
-		out.println("</div>");
-
-		out.println("<div class=\"outer-form-group\">");
-		out.println("<div class=\"inner-form-group\">");
-		out.println("<label for=\"emailAddress\" class=\"form-label\">Email Address</label>");
-		out.println("<input type=\"email\" class=\"form-control\" id=\"emailAddress\" name=\"emailAddress\">");
-		out.println("</div>");
-		out.println("</div>");
-
-		out.println("<div style=\"display: flex\">");
-		out.println("<button type=\"submit\" class=\"btn btn-primary\">Save</button>");
-		out.println("</div>");
-
-		out.println("</form>");
-		out.println("</div>");
-
-		out.println("</body>");
-		out.println("</html>");
-
-		out.close();
+		String redirectURL = "";		
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-
-			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/employees", "root", "Godsaveus57");
+			
+			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/employees", "YOUR USER NAME", "PASSWORD");
+			
 			PreparedStatement pst = con.prepareStatement(
 					"insert into employee(ename, eDateOfBirth, eContactNo, eDateOfJoining, eEmailAddress) values(?,?,?,?,?)");
 
@@ -114,14 +53,22 @@ public class EmployeeRegistrationServlet extends HttpServlet {
 			int rowCount = pst.executeUpdate();
 			if (rowCount > 0) {
 				// Pass the data as URL parameters to EmployeeDetails.jsp
+//				redirectURL = "/EmployeeDetails.jsp" + "?ename=" + ename
+//						+ "&eDateOfBirth=" + eDateOfBirth + "&eContactNo=" + eContactNo + "&eDateOfJoining="
+//						+ eDateOfJoining + "&eEmailAddress=" + eEmailAddress;
+				//request.setAttribute("status", "failed");
 				
-				String redirectURL = "/WhatsAppIntegrationMicroservice/EmployeeDetails.jsp" + "?ename=" + ename + "&eDateOfBirth=" + eDateOfBirth
-						+ "&eContactNo=" + eContactNo + "&eDateOfJoining=" + eDateOfJoining + "&eEmailAddress="
-						+ eEmailAddress;
-				response.sendRedirect(redirectURL);
+				
+				request.setAttribute("ename", ename);
+				request.setAttribute("eContactNo",eContactNo);
+				request.setAttribute("eDateOfBirth",eDateOfBirth);
+				request.setAttribute("eDateOfJoining",eDateOfBirth);
+				request.setAttribute("eEmailAddress",eEmailAddress);
+				
+				dispatcher.forward(request, response);
 			} else {
 				request.setAttribute("status", "failed");
-				dispatcher = request.getRequestDispatcher("EmployeeDetails.jsp");
+				
 				dispatcher.forward(request, response);
 			}
 		} catch (Exception e) {
@@ -135,6 +82,7 @@ public class EmployeeRegistrationServlet extends HttpServlet {
 			}
 
 		}
+		
 
 	}
 }

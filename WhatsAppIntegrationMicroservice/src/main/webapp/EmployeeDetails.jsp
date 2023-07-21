@@ -14,19 +14,19 @@
 		<h1>Employee Details</h1>
 		<p>
 			Name:
-			<%=request.getParameter("ename")%></p>
+			<%=request.getAttribute("ename")%></p>
 		<p>
 			Date Of Birth:
-			<%=request.getParameter("eDateOfBirth")%></p>
+			<%=request.getAttribute("eDateOfBirth")%></p>
 		<p>
 			Contact No.:
-			<%=request.getParameter("eContactNo")%></p>
+			<%=request.getAttribute("eContactNo")%></p>
 		<p>
 			Date Of Joining:
-			<%=request.getParameter("eDateOfJoining")%></p>
+			<%=request.getAttribute("eDateOfJoining")%></p>
 		<p>
 			Email Address:
-			<%=request.getParameter("eEmailAddress")%></p>
+			<%=request.getAttribute("eEmailAddress")%></p>
 
 		<%-- Add any additional data you want to display here --%>
 
